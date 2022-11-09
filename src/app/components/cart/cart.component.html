@@ -1,0 +1,98 @@
+<div class="cart-container">
+  <div class="cart-item">
+    <div class="cart-panel">
+      <div class="empty-cart-message" *ngIf="cart.length == 0">
+        Cart is empty
+      </div>
+      <div class="cart-item-details" *ngFor="let ol of cart">
+        <img src="{{ ol.product.url }}" alt="" />
+        <div class="details">
+          <h3>{{ ol.product.name }}</h3>
+          <p>${{ ol.product.price }}</p>
+          <p>
+            Amount:
+            <input
+              class="number-input"
+              type="number"
+              [(ngModel)]="ol.quantity"
+              (ngModelChange)="updateQuantity()"
+              min="1"
+            />
+          </p>
+        </div>
+        <div class="remove">
+          <button (click)="removeItem(ol.product.id)">X</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-panel">
+      <form #form="ngForm" (ngSubmit)="submitCart()">
+        <p>Full name</p>
+        <p>
+          <input
+            type="text"
+            [(ngModel)]="fullname"
+            name="fullname"
+            placeholder="(minimum 3 characters)"
+            required
+            minlength="3"
+            #fn="ngModel"
+          />
+        </p>
+        <p>Address</p>
+        <p>
+          <input
+            type="text"
+            [(ngModel)]="address"
+            name="address"
+            placeholder="(minimum 6 characters)"
+            required
+            minlength="6"
+            #adr="ngModel"
+          />
+        </p>
+        <p>Credit card number</p>
+        <p>
+          <input
+            required
+            minlength="16"
+            pattern="[0-9]*"
+            maxlength="16"
+            type="text"
+            [(ngModel)]="cardnumber"
+            name="cardnumber"
+            placeholder="(16-digit number)"
+            #cn="ngModel"
+          />
+        </p>
+        <button [disabled]="form.invalid">Submit</button>
+      </form>
+      <div class="error-message" *ngIf="cn.invalid && cn.dirty && cn.errors">
+        <div *ngIf="cn.errors['required']">
+          Please provide your credit card number.
+        </div>
+        <div *ngIf="cn.errors['minlength']">
+          The credit number must contain at 16 characters.
+        </div>
+        <div *ngIf="cn.errors['pattern']">
+          The credit number must contain digits only.
+        </div>
+      </div>
+      <div class="error-message" *ngIf="fn.invalid && fn.dirty && fn.errors">
+        <div *ngIf="fn.errors['required']">Please provide your name.</div>
+        <div *ngIf="fn.errors['minlength']">
+          The full name must contains at least 3 characters
+        </div>
+      </div>
+      <div class="error-message" *ngIf="adr.invalid && adr.dirty && adr.errors">
+        <div *ngIf="adr.errors['required']">Please provide your address.</div>
+        <div *ngIf="adr.errors['minlength']">
+          The address must contains at least 3 characters
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cart-container">
+  <h1>Total: ${{ total }}</h1>
+</div>
